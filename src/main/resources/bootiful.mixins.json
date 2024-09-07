@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "mod.crontent.bootiful.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "CombinedEntryAccessor",
+    "EntityLandingEventMixin",
+    "ItemEntryAccessor",
+    "LeafEntryAccessor",
+    "LivingEntityMixin",
+    "LootPoolBuilderAccessor",
+    "LootPoolEntryAccessor",
+    "PlayerEntityMixin",
+    "SweetBerryBushBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

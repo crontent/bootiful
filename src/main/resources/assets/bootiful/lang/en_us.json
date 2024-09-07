@@ -1,0 +1,57 @@
+{
+  "item.bootiful.cloud_boots": "Cloud Boots",
+  "item.bootiful.cloud_boots_description": "Imbued with cloud force",
+
+  "item.bootiful.spike_boots": "Spike Boots",
+  "item.bootiful.spike_boots_description_1": "Can anchor into the ground",
+  "item.bootiful.spike_boots_description_2": "and prick enemies",
+  "item.bootiful.spike_boots_action": "Sneak to extend spikes",
+
+  "item.bootiful.forest_boots": "Foresters Boots",
+  "item.bootiful.forest_boots_description_1": "Mother Earth's bounty",
+  "item.bootiful.forest_boots_description_2": "randomly grants health in nature",
+
+  "item.bootiful.golden_feather": "Golden Feather",
+  "item.bootiful.obsidian_shard": "Obsidian Shard",
+  "item.bootiful.iron_plating": "Iron Plating",
+  "item.bootiful.fairy_dust": "Fairy Dust",
+
+  "attribute.name.generic.bootiful.nature_drop_chance": "Nature Drop Chance",
+
+  "tooltip.bootiful.when_in_forest": "When in Forest",
+
+
+  "text.config.bootiful-config.title": "Bootiful - CONFIGURATION",
+
+  "text.config.bootiful-config.category.cloudBootsConfig": "Cloud Boots",
+  "text.config.bootiful-config.option.cloudBootsConfig.useLegacyRecipe": "Legacy Recipe",
+  "text.config.bootiful-config.option.cloudBootsConfig.useLegacyRecipe.tooltip": "Whether to use the old ChocolateQuest recipe of only golden feathers",
+  "text.config.bootiful-config.option.cloudBootsConfig.doesFallDamageHurt": "Fall Damage",
+  "text.config.bootiful-config.option.cloudBootsConfig.doesFallDamageHurt.tooltip": "Enabled: Apply (reduced) fall damage. Disabled: No fall damage at all (legacy)",
+  "text.config.bootiful-config.option.cloudBootsConfig.doesFallDamageRemoveCondition": "Fall damages boots condition",
+  "text.config.bootiful-config.option.cloudBootsConfig.doesFallDamageRemoveCondition.tooltip": "Whether falls that deal damage to player, also damage the boot condition.",
+
+  "text.config.bootiful-config.category.spikeBootsConfig": "Spike Boots",
+  "text.config.bootiful-config.option.spikeBootsConfig.stompDamage": "Damage on stomping",
+  "text.config.bootiful-config.option.spikeBootsConfig.stompDamage.tooltip": "How much damage to deal with the stomping attack",
+
+  "text.config.bootiful-config.category.forestBootsConfig": "Forest Boots",
+  "text.config.bootiful-config.option.forestBootsConfig.fairyDustDropChance": "Fairy Dust Drop Chance",
+  "text.config.bootiful-config.option.forestBootsConfig.fairyDustDropChance.tooltip": "Drop chance out of dark oak leaves",
+  "text.config.bootiful-config.option.forestBootsConfig.bonusLootMultiplier": "Nature Drop Chance Multiplier",
+  "text.config.bootiful-config.option.forestBootsConfig.bonusLootMultiplier.tooltip": "Value of the Nature Drop Chance bonus. This modifies drop chances of the items below.",
+  "text.config.bootiful-config.option.forestBootsConfig.healBonusChance": "Chance to heal near nature blocks",
+  "text.config.bootiful-config.option.forestBootsConfig.healBonusChance.tooltip": "The heal chance for when the Maximum contributing nature blocks are detected in radius.\nScales down when less blocks are detected.",
+  "text.config.bootiful-config.option.forestBootsConfig.healBonusRadius": "Radius for nature blocks",
+  "text.config.bootiful-config.option.forestBootsConfig.healBonusRadius.tooltip": "Radius for nature blocks to be taken into consideration",
+  "text.config.bootiful-config.option.forestBootsConfig.maxContributingBlockCount": "Maximum contributing nature blocks",
+  "text.config.bootiful-config.option.forestBootsConfig.maxContributingBlockCount.tooltip": "Max number of blocks that increase heal chance.\nChance does not increase after number is met.",
+  "text.config.bootiful-config.option.forestBootsConfig.forestSpeedMultiplier": "Additional Speed in Forest",
+  "text.config.bootiful-config.option.forestBootsConfig.forestSpeedMultiplier.tooltip": "Speed boost when in forest biomes",
+  "text.config.bootiful-config.option.forestBootsConfig.bonusChanceItems": "Items with bonus drop chance",
+  "text.config.bootiful-config.option.forestBootsConfig.bonusChanceItems.tooltip": "Each entry is checked for random chance conditions in its loot table\nIf found, applies the bonus condition from forest boots\nDoes not guarantee the condition can be applied!\nInput IDs in the format namespace:item_id"
+
+
+
+
+}

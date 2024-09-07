@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "bootiful",
+	"version": "${version}",
+	"name": "Bootiful",
+	"description": "Treat your feet with these lovingly crafted custom boots. Every item confers different powers. Simply bootiful!",
+	"authors": [
+		"crontent"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/bootiful",
+		"sources": ""
+	},
+	"license": "GPLv3",
+	"icon": "assets/bootiful/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-datagen": [
+			"mod.crontent.bootiful.BootifulDataGenerator"
+		],
+		"main": [
+			"mod.crontent.bootiful.Bootiful"
+		],
+		"client": [
+			"mod.crontent.bootiful.BootifulClient"
+		]
+	},
+	"mixins": [
+		"bootiful.mixins.json"
+	],
+	"accessWidener": "bootiful.accesswidener",
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

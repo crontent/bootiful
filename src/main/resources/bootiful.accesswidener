@@ -1,0 +1,5 @@
+accessWidener v2 named
+accessible method net/minecraft/loot/function/ApplyBonusLootFunction <init> (Ljava/util/List;Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/loot/function/ApplyBonusLootFunction$Formula;)V
+accessible class net/minecraft/loot/function/ApplyBonusLootFunction$Formula
+accessible field net/minecraft/loot/function/ApplyBonusLootFunction enchantment Lnet/minecraft/registry/entry/RegistryEntry;
+accessible field net/minecraft/loot/function/ApplyBonusLootFunction formula Lnet/minecraft/loot/function/ApplyBonusLootFunction$Formula;
