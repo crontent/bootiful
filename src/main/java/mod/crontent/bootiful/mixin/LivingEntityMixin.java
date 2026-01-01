@@ -5,13 +5,15 @@ import mod.crontent.bootiful.ModBoots;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
 
-    @ModifyExpressionValue(method = "travel",
+    @ModifyExpressionValue(method = "travelMidAir",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSlipperiness()F"))
     private float getSlipperinessOrDefault(float original){
         if(((Object)this) instanceof PlayerEntity player){

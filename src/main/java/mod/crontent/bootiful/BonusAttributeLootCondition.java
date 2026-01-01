@@ -11,10 +11,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameter;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
+import net.minecraft.util.context.ContextParameter;
 
 import java.util.Set;
 
@@ -35,11 +35,6 @@ public record BonusAttributeLootCondition(RegistryEntry<EntityAttribute> attribu
     }
 
     @Override
-    public Set<LootContextParameter<?>> getRequiredParameters() {
-        return ImmutableSet.of(LootContextParameters.THIS_ENTITY);
-    }
-
-    @Override
     public boolean test(LootContext context) {
         Entity breakingEntity = context.get(LootContextParameters.THIS_ENTITY);
         double attributeOverOneValue = breakingEntity instanceof PlayerEntity player ? player.getAttributeValue(ModAttributes.NATURE_DROP_CHANCE) - 1f : 0f;
@@ -48,7 +43,7 @@ public record BonusAttributeLootCondition(RegistryEntry<EntityAttribute> attribu
 
         double chance = this.baseChance + this.baseChance * attributeOverOneValue;
         boolean result = context.getRandom().nextFloat() <= chance;
-        breakingEntity.sendMessage(Text.of("Chance of Drop" + chance + ", Will I drop bcuz of Atribute? " + result));
+        //breakingEntity.sendMessage(Text.of("Chance of Drop" + chance + ", Will I drop bcuz of Atribute? " + result));
         return result;
     }
 

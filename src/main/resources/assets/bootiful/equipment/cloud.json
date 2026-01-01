@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "bootiful:cloud"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "bootiful:cloud"
+      }
+    ]
+  }
+}

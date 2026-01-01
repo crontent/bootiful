@@ -26,8 +26,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         super(entityType, world);
     }
 
-    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
-
     /**
      * Modify Air speed for all Boots with interface IAirspeedChange
      */

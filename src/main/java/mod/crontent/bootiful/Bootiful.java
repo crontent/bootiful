@@ -21,13 +21,14 @@ public class Bootiful implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModAttributes.initialize();
-		ModArmorMaterials.initialize();
 		ModItems.initialize();
 		ModBoots.initialize();
 		ModEventListeners.initialize();
 		ModLootFunctions.initialize();
 		ModLootConditions.initialize();
 		ModParticles.initialize();
+        ModTags.initialize();
+        ModArmorMaterials.initialize();
 
 
 

@@ -4,15 +4,18 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.loot.condition.AnyOfLootCondition;
 import net.minecraft.loot.condition.TableBonusLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,6 +24,8 @@ public class BootifulDataGenerator implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(LootTableTest::new);
+        pack.addProvider(RepairTags::new);
+        pack.addProvider(BootifulRecipeProvider::new);
     }
 
     private static class LootTableTest extends FabricBlockLootTableProvider {
@@ -31,7 +36,7 @@ public class BootifulDataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         public void generate() {
-            RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+            RegistryWrapper.Impl<Enchantment> impl = this.registries.getOrThrow(RegistryKeys.ENCHANTMENT);
 
 //            addDrop(Blocks.GRASS_BLOCK, drops(Items.DIAMOND)
 //                    .apply(ApplyBonusAttributeLootFunction.builder(ModAttributes.NATURE_DROP_CHANCE));
@@ -52,6 +57,20 @@ public class BootifulDataGenerator implements DataGeneratorEntrypoint {
             );
         }
     }
+
+    private static class RepairTags extends FabricTagProvider.ItemTagProvider {
+        public RepairTags(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+            valueLookupBuilder(ModTags.REPAIRS_FOREST_BOOTS).add(Items.LEATHER);
+            valueLookupBuilder(ModTags.REPAIRS_CLOUD_BOOTS).add(ModItems.GOLDEN_FEATHER);
+            valueLookupBuilder(ModTags.REPAIRS_SPIKE_BOOTS).add(Items.DIAMOND);
+        }
+    }
+
 
 }
 

@@ -12,37 +12,27 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+
+import java.util.function.Function;
 
 public class ModBoots {
 
-    private static final BootifulConfig.CloudBootsConfig cc = Bootiful.CONFIG.cloudBootsConfig;
-    public static Item CLOUD_BOOTS = register("cloud_boots", new CloudBootsItem(ModArmorMaterials.CLOUD_MATERIAL, 20, 1, cc.doesFallDamageHurt(), cc.doesFallDamageRemoveCondition()));
+    public static Item CLOUD_BOOTS = ModItems.register("cloud_boots",
+            CloudBootsItem::new, new Item.Settings());
 
-    //private static final  BootifulConfig.SpikeBootsConfig sc = Bootiful.CONFIG.spikeBootsConfig;
-    public static Item SPIKE_BOOTS = register("spike_boots", new SpikeBootsItem(ModArmorMaterials.SPIKE_MATERIAL, 30));
+    public static Item SPIKE_BOOTS = ModItems.register("spike_boots",
+            SpikeBootsItem::new, new Item.Settings());
 
-    private static final BootifulConfig.ForestBootsConfig fc = Bootiful.CONFIG.forestBootsConfig;
-    public static Item FOREST_BOOTS = register("forest_boots", new ForestBootsItem(ModArmorMaterials.FOREST_MATERIAL,
-            17,
-            fc.healBonusChance(),
-            fc.healBonusRadius(),
-            fc.maxContributingBlockCount(),
-            fc.forestSpeedMultiplier(),
-            fc.bonusLootMultiplier()));
-
-    public static Item register(String id, Item entry){
-        return Registry.register(Registries.ITEM,
-                Identifier.of(Bootiful.MOD_ID, id),
-                entry);
-    }
-
-
+    public static Item FOREST_BOOTS = ModItems.register("forest_boots",
+            ForestBootsItem::new, new Item.Settings());
 
     public static void initialize() {
         Bootiful.LOGGER.info("Registering " + Bootiful.MOD_ID + " Boot items");

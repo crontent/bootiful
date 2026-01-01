@@ -9,11 +9,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameter;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.context.ContextParameter;
 import net.minecraft.util.math.random.Random;
 
 import java.util.List;
@@ -46,10 +46,6 @@ public class ApplyBonusAttributeLootFunction extends ConditionalLootFunction {
         return stack;
     }
 
-    @Override
-    public Set<LootContextParameter<?>> getRequiredParameters() {
-        return ImmutableSet.of(LootContextParameters.THIS_ENTITY);
-    }
 
     @Override
     public LootFunctionType<ApplyBonusAttributeLootFunction> getType() {

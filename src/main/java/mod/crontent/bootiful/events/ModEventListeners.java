@@ -4,6 +4,7 @@ import mod.crontent.bootiful.ModBoots;
 import mod.crontent.bootiful.ModItems;
 import mod.crontent.bootiful.boots.SpikeBootsItem;
 import mod.crontent.bootiful.interfaces.PoolConditionsModifyHelper;
+import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EquipmentSlot;
@@ -24,7 +25,7 @@ public class ModEventListeners {
 
         EntityLandingCallback.EVENT.register((entity ->
         {
-            if (entity instanceof PlayerEntity player && !entity.getWorld().isClient()) {
+            if (entity instanceof PlayerEntity player && !entity.getEntityWorld().isClient()) {
                 if (player.getEquippedStack(EquipmentSlot.FEET).isOf(ModBoots.SPIKE_BOOTS) && player.isSneaking()){
                     ((SpikeBootsItem) player.getEquippedStack(EquipmentSlot.FEET).getItem()).handleSpikeAttack(player);
                 }

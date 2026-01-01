@@ -3,6 +3,7 @@ package mod.crontent.bootiful.boots;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import mod.crontent.bootiful.Bootiful;
+import mod.crontent.bootiful.ModArmorMaterials;
 import mod.crontent.bootiful.ModAttributes;
 import mod.crontent.bootiful.ModParticles;
 import mod.crontent.bootiful.interfaces.IStatusEffectPurgable;
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -19,9 +21,10 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.equipment.ArmorMaterial;
+import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -31,15 +34,18 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
-public class ForestBootsItem extends ArmorItem implements IStatusEffectPurgable {
+public class ForestBootsItem extends Item implements IStatusEffectPurgable {
 
     /*
      */
@@ -51,61 +57,60 @@ public class ForestBootsItem extends ArmorItem implements IStatusEffectPurgable 
     private final Multimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> forestSpeedModifier;
     private final double forestSpeedMultiplier;
 
-    private final double LOOT_BONUS_MULTIPLIER;
+    private static double LOOT_BONUS_MULTIPLIER = Bootiful.CONFIG.forestBootsConfig.bonusLootMultiplier();
 
     private RegistryEntry<Biome> previous_biome = null;
 
 
     /**
-     * @param material
-     * @param durabilityMultiplier
      * @param bonusChance What should be the chance that the effect is triggered when {@link ForestBootsItem#MAX_CONTRIBUTING_BLOCK_COUNT} is reached?
      * @param bonusRadius
      * @param maxContributingBlockCount How many blocks to take into consideration at maximum
      */
-    public ForestBootsItem(RegistryEntry<ArmorMaterial> material, int durabilityMultiplier, double bonusChance, int bonusRadius, long maxContributingBlockCount, double forestSpeedMultiplier, double lootBonusMultiplier) {
-        super(material, Type.BOOTS, new Settings().maxDamage(Type.BOOTS.getMaxDamage(durabilityMultiplier)));
-        this.BONUS_RADIUS = bonusRadius;
-        this.BONUS_CHANCE = bonusChance / maxContributingBlockCount;
-        this.MAX_CONTRIBUTING_BLOCK_COUNT = maxContributingBlockCount;
+    public ForestBootsItem(Item.Settings settings) {
+        super(settings
+                .armor(ModArmorMaterials.FOREST_MATERIAL, EquipmentType.BOOTS)
+                .rarity(Rarity.UNCOMMON)
+                .attributeModifiers(getAttributeModifiers())
+        );
 
-        this.LOOT_BONUS_MULTIPLIER = lootBonusMultiplier;
+        this.BONUS_RADIUS = Bootiful.CONFIG.forestBootsConfig.healBonusRadius();
+        this.BONUS_CHANCE =  Bootiful.CONFIG.forestBootsConfig.healBonusChance() /  Bootiful.CONFIG.forestBootsConfig.maxContributingBlockCount();
+        this.MAX_CONTRIBUTING_BLOCK_COUNT =  Bootiful.CONFIG.forestBootsConfig.maxContributingBlockCount();
 
-        this.forestSpeedMultiplier = forestSpeedMultiplier;
+        this.forestSpeedMultiplier =  Bootiful.CONFIG.forestBootsConfig.forestSpeedMultiplier();
         this.forestSpeedModifier = HashMultimap.create(1, 1);
-        this.forestSpeedModifier.put(EntityAttributes.GENERIC_MOVEMENT_SPEED, new EntityAttributeModifier(Identifier.of(Bootiful.MOD_ID, "forest_boots_speed"), forestSpeedMultiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        this.forestSpeedModifier.put(EntityAttributes.MOVEMENT_SPEED, new EntityAttributeModifier(Identifier.of(Bootiful.MOD_ID, "forest_boots_speed"), forestSpeedMultiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     }
 
 
-    @Override
-    public AttributeModifiersComponent getAttributeModifiers() {
-        return super.getAttributeModifiers()
-                .with(
+    public static AttributeModifiersComponent getAttributeModifiers() {
+        return AttributeModifiersComponent.builder()
+                .add(
                         ModAttributes.NATURE_DROP_CHANCE,
                         new EntityAttributeModifier(
                                 Identifier.of(Bootiful.MOD_ID, "forest_boots_nature_drop_chance"),
                                 LOOT_BONUS_MULTIPLIER,
                                 EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-                        AttributeModifierSlot.FEET);
+                        AttributeModifierSlot.FEET)
+                .build();
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        tooltip.add(Text.translatable("item.bootiful.forest_boots_description_1").formatted(Formatting.AQUA));
-        tooltip.add(Text.translatable("item.bootiful.forest_boots_description_2").formatted(Formatting.AQUA));
-        MutableText mutablecomponent = Text.translatable(EntityAttributes.GENERIC_MOVEMENT_SPEED.value().getTranslationKey());
+    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+        textConsumer.accept(Text.translatable("item.bootiful.forest_boots_description_1").formatted(Formatting.AQUA));
+        textConsumer.accept(Text.translatable("item.bootiful.forest_boots_description_2").formatted(Formatting.AQUA));
+        MutableText mutablecomponent = Text.translatable(EntityAttributes.MOVEMENT_SPEED.value().getTranslationKey());
         mutablecomponent = Text.translatable("attribute.modifier.plus.1", (int) (forestSpeedMultiplier * 100), mutablecomponent)
                 .append(Text.of(" "))
                 .append(Text.translatable("tooltip.bootiful.when_in_forest"))
                 .formatted(Formatting.BLUE);
-        tooltip.add(mutablecomponent);
+        textConsumer.accept(mutablecomponent);
     }
 
-
-
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
         if (!world.isClient()
                 && entity instanceof PlayerEntity player) {
             if (player.getEquippedStack(EquipmentSlot.FEET).isOf(this)) {
@@ -113,10 +118,8 @@ public class ForestBootsItem extends ArmorItem implements IStatusEffectPurgable 
                 handleSpeedIncrease(world, player);
             }
         }
-        super.inventoryTick(stack, world, entity, slot, selected);
+        super.inventoryTick(stack, world, entity, slot);
     }
-
-
 
     private void handleBonusHealing(World world, PlayerEntity player) {
         if (world.getTime() % BONUS_INTERVAL == 0) {
@@ -153,7 +156,7 @@ public class ForestBootsItem extends ArmorItem implements IStatusEffectPurgable 
     private void executeBonus(BlockPos emanatingBlock, PlayerEntity player, World world) {
         //player.sendMessage(Text.of("executing bonus"));
         Vec3d blockPos = emanatingBlock.toCenterPos();
-        Vec3d connection = player.getPos().add(0,1,0).subtract(blockPos);
+        Vec3d connection = player.getEntityPos().add(0,1,0).subtract(blockPos);
         //player.sendMessage(Text.of(String.valueOf(connection)));
         if(world instanceof ServerWorld serverWorld){
             for (int i = 0; i < 25; i++) {
